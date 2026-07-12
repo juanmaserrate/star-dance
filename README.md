@@ -28,7 +28,13 @@ Después abrí en el navegador: **http://localhost:3000**
 | Profesor/a     | `profe.luis`| `profe123` |
 
 > ⚠️ Cambiá estas contraseñas antes de usarlo de verdad (el admin puede hacerlo desde
-> **Panel admin → Usuarios**).
+> **Panel admin → Usuarios**). Estas credenciales son solo datos de ejemplo del `seed.js`.
+
+### Producción
+
+Antes de publicar la app en un servidor real, definí una clave de sesión propia con la variable
+de entorno `SESSION_SECRET` (por ejemplo en Windows: `set SESSION_SECRET=algo-largo-y-secreto`
+antes de `npm start`). Si no la definís, se usa una clave por defecto solo apta para desarrollo.
 
 ## Qué puede hacer cada rol
 

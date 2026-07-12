@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
   session({
-    secret: 'star-dance-liga-secreto-cambiar-en-produccion',
+    secret: process.env.SESSION_SECRET || 'star-dance-dev-secret-cambiar-en-produccion',
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 8 }, // 8 horas
