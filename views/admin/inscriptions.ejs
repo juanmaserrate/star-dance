@@ -1,0 +1,58 @@
+<%- include('../partials/admin_tabs', { tab: 'inscripciones' }) %>
+<div class="toolbar">
+  <h1 class="gold" style="margin:0">Inscripciones</h1><div class="spacer"></div>
+  <a href="/admin/inscripciones/export.csv?<%= new URLSearchParams(q).toString() %>" class="btn btn-gold btn-sm">⬇ Exportar CSV (Excel)</a>
+</div>
+
+<form method="GET" action="/admin/inscripciones" class="card">
+  <div class="grid grid-3">
+    <div>
+      <label>Torneo</label>
+      <select name="torneo" onchange="this.form.submit()">
+        <option value="">Todos</option>
+        <% torneos.forEach(t => { %><option value="<%= t.id %>" <%= q.torneo==String(t.id)?'selected':'' %>><%= t.name %></option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Categoría</label>
+      <select name="categoria" onchange="this.form.submit()">
+        <option value="">Todas</option>
+        <% cats.forEach(c => { %><option value="<%= c.id %>" <%= q.categoria==String(c.id)?'selected':'' %>><%= c.name %></option><% }) %>
+      </select>
+    </div>
+    <div>
+      <label>Estado de pago</label>
+      <select name="pago" onchange="this.form.submit()">
+        <option value="">Todos</option>
+        <option value="1" <%= q.pago==='1'?'selected':'' %>>Pagados</option>
+        <option value="0" <%= q.pago==='0'?'selected':'' %>>Pendientes</option>
+      </select>
+    </div>
+  </div>
+</form>
+
+<p class="muted"><strong><%= rows.length %></strong> inscripción(es) encontradas.</p>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Patinador</th><th>Edad</th><th>Club</th><th>Torneo · Categoría</th><th>Profe</th><th>Pago</th><th>Acciones</th></tr></thead>
+  <tbody>
+    <% if(rows.length===0){ %><tr><td colspan="7" class="muted">No hay inscripciones con esos filtros.</td></tr><% } %>
+    <% rows.forEach(i => { %>
+      <tr>
+        <td><strong><%= i.last_name %>, <%= i.first_name %></strong><br><span class="muted" style="font-size:.8rem">DNI <%= i.dni||'—' %></span></td>
+        <td><%= ageAt(i.birth_date)!=null ? ageAt(i.birth_date) : '—' %></td>
+        <td><%= i.club || '—' %></td>
+        <td><%= i.tname %><br><span class="tag"><%= i.cname %></span><%= i.cschedule ? '<span class="muted" style="font-size:.8rem"> · '+i.cschedule+'</span>' : '' %></td>
+        <td><%= i.profe %></td>
+        <td><%= i.paid ? '<span class="badge badge-ok">Pagado</span>' : '<span class="badge badge-no">Pendiente</span>' %></td>
+        <td style="white-space:nowrap">
+          <form action="/admin/inscripciones/<%= i.id %>/pago" method="POST" style="display:inline">
+            <input type="hidden" name="paid" value="<%= i.paid ? '0' : '1' %>">
+            <button class="btn btn-sm <%= i.paid ? 'btn-ghost' : 'btn-gold' %>"><%= i.paid ? 'Marcar pend.' : 'Marcar pago' %></button>
+          </form>
+          <a href="/admin/alumnos/<%= i.student_id %>" class="btn btn-violeta btn-sm">Ficha</a>
+          <a href="/certificado/<%= i.code %>" target="_blank" class="btn btn-ghost btn-sm">Cert.</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table></div>

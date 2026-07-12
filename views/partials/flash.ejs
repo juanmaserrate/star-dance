@@ -1,0 +1,4 @@
+<% if (typeof flash !== 'undefined' && flash) { %>
+  <% if (flash.ok) { %><div class="flash flash-ok">✔ <%= flash.ok %></div><% } %>
+  <% if (flash.error) { %><div class="flash flash-error">⚠ <%= flash.error %></div><% } %>
+<% } %>

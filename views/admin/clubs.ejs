@@ -1,0 +1,25 @@
+<%- include('../partials/admin_tabs', { tab: 'clubes' }) %>
+<h1 class="gold">Clubes</h1>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Club</th><th>Ciudad</th><th>Patinadores</th><th></th></tr></thead>
+      <tbody>
+        <% if(clubes.length===0){ %><tr><td colspan="4" class="muted">No hay clubes cargados.</td></tr><% } %>
+        <% clubes.forEach(c => { %>
+          <tr><td><strong><%= c.name %></strong></td><td><%= c.city||'—' %></td><td><%= c.n %></td>
+            <td><form action="/admin/clubes/<%= c.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar club? Los alumnos quedan sin club.')">
+              <button class="btn btn-danger btn-sm">✕</button></form></td></tr>
+        <% }) %>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <h3>Nuevo club</h3>
+    <form action="/admin/clubes" method="POST">
+      <label>Nombre *</label><input name="name" required placeholder="ej: Club Atlético San Martín">
+      <label>Ciudad</label><input name="city" placeholder="ej: San Martín">
+      <button class="btn btn-gold mt" type="submit">Agregar club</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="section-title"><h1 class="gold">Torneos de la liga</h1></div>
+<% if (torneos.length === 0) { %>
+  <div class="card-dark card">Todavía no hay torneos publicados. ¡Muy pronto novedades! ✨</div>
+<% } else { %>
+  <div class="grid grid-2">
+    <% torneos.forEach(t => { %>
+      <div class="card tour-card">
+        <div class="tour-date"><%= t.date ? fmtDate(t.date) : 'Fecha a confirmar' %>
+          <% if (t.status==='cerrado') { %><span class="badge badge-info">Inscripción cerrada</span><% } %>
+        </div>
+        <h3><%= t.name %></h3>
+        <p style="color:#6a5a80"><%= t.location || 'Sede a confirmar' %> · <%= t.categorias %> categorías</p>
+        <% if (t.description) { %><p style="color:#4a3a5e"><%= t.description %></p><% } %>
+        <a href="/torneos/<%= t.id %>" class="btn btn-gold btn-sm">Ver categorías</a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>

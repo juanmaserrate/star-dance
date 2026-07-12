@@ -1,0 +1,78 @@
+<%- include('../partials/admin_tabs', { tab: 'torneos' }) %>
+<a href="/admin/torneos" class="muted">← Volver a torneos</a>
+<div class="toolbar mt">
+  <h1 class="gold" style="margin:0"><%= t.name %></h1>
+  <span class="badge <%= t.status==='publicado'?'badge-ok':(t.status==='cerrado'?'badge-info':'badge-no') %>"><%= t.status %></span>
+  <div class="spacer"></div>
+  <a href="/admin/inscripciones?torneo=<%= t.id %>" class="btn btn-ghost btn-sm">Ver inscriptos</a>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Datos del torneo</h3>
+    <form action="/admin/torneos/<%= t.id %>?_method=PUT" method="POST">
+      <label>Nombre *</label><input name="name" value="<%= t.name %>" required>
+      <div class="form-row">
+        <div><label>Fecha</label><input type="date" name="date" value="<%= t.date||'' %>"></div>
+        <div><label>Estado</label>
+          <select name="status">
+            <% ['borrador','publicado','cerrado'].forEach(s => { %><option <%= t.status===s?'selected':'' %>><%= s %></option><% }) %>
+          </select>
+        </div>
+      </div>
+      <label>Sede</label><input name="location" value="<%= t.location||'' %>">
+      <label>Descripción</label><textarea name="description" rows="3"><%= t.description||'' %></textarea>
+      <div class="toolbar mt">
+        <button class="btn btn-gold" type="submit">Guardar cambios</button>
+      </div>
+    </form>
+    <form action="/admin/torneos/<%= t.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar el torneo y todas sus inscripciones?')">
+      <button class="btn btn-danger btn-sm">Eliminar torneo</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>Agregar categoría</h3>
+    <form action="/admin/torneos/<%= t.id %>/categorias" method="POST">
+      <label>Nombre de la categoría *</label>
+      <input name="name" required placeholder="ej: Escuela A, Libre, Federados...">
+      <label>Nivel</label>
+      <input name="level" placeholder="ej: Iniciación, Intermedio, Avanzado">
+      <div class="form-row">
+        <div><label>Edad mínima</label><input type="number" name="age_min" min="3" max="99" placeholder="ej: 6"></div>
+        <div><label>Edad máxima</label><input type="number" name="age_max" min="3" max="99" placeholder="ej: 8"></div>
+      </div>
+      <div class="form-row">
+        <div><label>Género</label>
+          <select name="gender"><option value="">Mixto</option><option>Femenino</option><option>Masculino</option></select>
+        </div>
+        <div><label>Horario</label><input name="schedule" placeholder="ej: Sáb 10:00"></div>
+      </div>
+      <button class="btn btn-violeta mt" type="submit">+ Agregar categoría</button>
+    </form>
+  </div>
+</div>
+
+<div class="section-title"><h2 class="gold">Categorías del torneo</h2></div>
+<% if (categorias.length===0) { %>
+  <div class="card-dark card">Todavía no cargaste categorías. Agregá edades, niveles y horarios arriba.</div>
+<% } else { %>
+  <div class="table-wrap"><table class="data">
+    <thead><tr><th>Categoría</th><th>Nivel</th><th>Edades</th><th>Género</th><th>Horario</th><th>Inscriptos</th><th></th></tr></thead>
+    <tbody>
+      <% categorias.forEach(c => { %>
+        <tr>
+          <td><strong><%= c.name %></strong></td><td><%= c.level||'—' %></td>
+          <td><%= (c.age_min!=null||c.age_max!=null) ? (c.age_min||'?')+' a '+(c.age_max||'?')+' años' : 'Libre' %></td>
+          <td><%= c.gender||'Mixto' %></td><td><%= c.schedule||'—' %></td>
+          <td><span class="badge badge-info"><%= c.insc %></span></td>
+          <td>
+            <form action="/admin/categorias/<%= c.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar categoría?')">
+              <button class="btn btn-danger btn-sm">✕</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table></div>
+<% } %>

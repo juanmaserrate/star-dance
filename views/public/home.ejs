@@ -1,0 +1,42 @@
+<section class="hero">
+  <img src="/img/logo.svg" alt="Star Dance" class="logo">
+  <div class="sub">Liga de Patinaje</div>
+  <h1>Star Dance <span class="gold">Patín Artístico</span></h1>
+  <p class="lead">Brillamos sobre ruedas. Somos la comunidad que hace crecer el patín artístico:
+    torneos, categorías para cada edad y nivel, y un equipo que acompaña a cada patinador/a. ✨</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="/torneos" class="btn btn-gold">Ver torneos</a>
+    <a href="/jueces" class="btn btn-ghost">Conocé al jurado</a>
+    <% if (!user) { %><a href="/login" class="btn btn-violeta">Soy profe · Ingresar</a><% } %>
+  </div>
+</section>
+
+<div class="grid grid-4">
+  <div class="stat"><div class="num"><%= stats.torneos %></div><div class="lbl">Torneos</div></div>
+  <div class="stat"><div class="num"><%= stats.alumnos %></div><div class="lbl">Patinadores</div></div>
+  <div class="stat"><div class="num"><%= stats.inscriptos %></div><div class="lbl">Inscripciones</div></div>
+  <div class="stat"><div class="num"><%= stats.clubes %></div><div class="lbl">Clubes</div></div>
+</div>
+
+<div class="section-title"><h2 class="gold">Próximos torneos</h2></div>
+<% if (torneos.length === 0) { %>
+  <div class="card-dark card">Muy pronto vamos a anunciar nuevas fechas. ¡Seguinos en Instagram para no perdértelas!</div>
+<% } else { %>
+  <div class="grid grid-2">
+    <% torneos.forEach(t => { %>
+      <div class="card tour-card">
+        <div class="tour-date"><%= t.date ? fmtDate(t.date) : 'Fecha a confirmar' %></div>
+        <h3><%= t.name %></h3>
+        <p class="muted" style="color:#6a5a80"><%= t.location || 'Sede a confirmar' %></p>
+        <a href="/torneos/<%= t.id %>" class="btn btn-gold btn-sm">Ver detalles</a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<div class="section-title"><h2 class="gold">¿Cómo funciona?</h2></div>
+<div class="grid grid-3">
+  <div class="card-dark card"><h3>1 · Los profes cargan</h3><p>Cada profesor/a da de alta a sus alumnos una sola vez y guarda sus fichas técnicas, documentos y seguros.</p></div>
+  <div class="card-dark card"><h3>2 · Inscribís en 2 clicks</h3><p>Elegís al patinador ya guardado y lo inscribís a la categoría, nivel y horario del torneo.</p></div>
+  <div class="card-dark card"><h3>3 · La liga organiza</h3><p>La organización arma las categorías, controla los pagos y genera los certificados de inscripción.</p></div>
+</div>

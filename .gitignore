@@ -1,0 +1,6 @@
+node_modules/
+uploads/
+stardance.db
+stardance.db-*
+*.log
+.DS_Store

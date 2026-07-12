@@ -1,0 +1,37 @@
+<a href="/profe" class="muted">← Volver</a>
+<div class="card mt" style="max-width:720px">
+  <h1><%= student.id ? 'Editar' : 'Nuevo' %> alumno/a</h1>
+  <form action="<%= action %>" method="<%= method %>">
+    <div class="form-row">
+      <div><label>Nombre *</label><input name="first_name" value="<%= student.first_name||'' %>" required></div>
+      <div><label>Apellido *</label><input name="last_name" value="<%= student.last_name||'' %>" required></div>
+    </div>
+    <div class="form-row">
+      <div><label>DNI</label><input name="dni" value="<%= student.dni||'' %>"></div>
+      <div><label>Fecha de nacimiento</label><input type="date" name="birth_date" value="<%= student.birth_date||'' %>"></div>
+    </div>
+    <div class="form-row">
+      <div><label>Género</label>
+        <select name="gender">
+          <option value="">—</option>
+          <% ['Femenino','Masculino','Otro'].forEach(g => { %>
+            <option <%= student.gender===g?'selected':'' %>><%= g %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div><label>Club</label>
+        <select name="club_id">
+          <option value="">Sin club</option>
+          <% clubs.forEach(c => { %>
+            <option value="<%= c.id %>" <%= student.club_id===c.id?'selected':'' %>><%= c.name %></option>
+          <% }) %>
+        </select>
+      </div>
+    </div>
+    <label>Nivel del patinador</label>
+    <input name="level" value="<%= student.level||'' %>" placeholder="ej: Iniciación, Intermedio, Avanzado, Federado...">
+    <label>Notas / observaciones</label>
+    <textarea name="notes" rows="3" placeholder="Datos útiles: contacto de familiar, alergias, etc."><%= student.notes||'' %></textarea>
+    <button class="btn btn-gold mt" type="submit">Guardar alumno/a</button>
+  </form>
+</div>

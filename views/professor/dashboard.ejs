@@ -1,0 +1,37 @@
+<div class="toolbar">
+  <h1 class="gold" style="margin:0">Hola, <%= user.full_name.split(' ')[0] %> 👋</h1>
+  <div class="spacer"></div>
+  <a href="/profe/alumnos/nuevo" class="btn btn-gold">+ Nuevo alumno</a>
+  <a href="/profe/inscribir" class="btn btn-ghost">Inscribir a torneo</a>
+</div>
+
+<div class="grid grid-3 mb">
+  <div class="stat"><div class="num"><%= stats.alumnos %></div><div class="lbl">Mis alumnos</div></div>
+  <div class="stat"><div class="num"><%= stats.inscriptos %></div><div class="lbl">Inscripciones</div></div>
+  <div class="stat"><div class="num"><%= stats.pagos %></div><div class="lbl">Pagas</div></div>
+</div>
+
+<div class="section-title"><h2 class="gold">Mis patinadores</h2></div>
+<% if (students.length === 0) { %>
+  <div class="card-dark card">
+    Todavía no cargaste alumnos. Cargalos una vez y quedan guardados para inscribirlos a cualquier torneo.
+    <div class="mt"><a href="/profe/alumnos/nuevo" class="btn btn-gold">Cargar mi primer alumno</a></div>
+  </div>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Apellido y nombre</th><th>Edad</th><th>Club</th><th>Nivel</th><th></th></tr></thead>
+      <tbody>
+        <% students.forEach(s => { %>
+          <tr>
+            <td><strong><%= s.last_name %>, <%= s.first_name %></strong></td>
+            <td><%= ageAt(s.birth_date) != null ? ageAt(s.birth_date) + ' años' : '—' %></td>
+            <td><%= s.club_name || '—' %></td>
+            <td><%= s.level || '—' %></td>
+            <td><a href="/profe/alumnos/<%= s.id %>" class="btn btn-violeta btn-sm">Ver ficha</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

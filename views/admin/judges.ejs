@@ -1,0 +1,29 @@
+<%- include('../partials/admin_tabs', { tab: 'jueces' }) %>
+<h1 class="gold">Jurado (página pública)</h1>
+<div class="grid grid-2">
+  <div class="card">
+    <ul class="clean">
+      <% if(jueces.length===0){ %><li class="muted">Sin jueces cargados.</li><% } %>
+      <% jueces.forEach(j => { %>
+        <li class="doc-item">
+          <span><strong><%= j.full_name %></strong> <%= j.specialty ? '· '+j.specialty : '' %>
+            <%= j.visible ? '<span class="badge badge-ok">visible</span>' : '<span class="badge badge-no">oculto</span>' %></span>
+          <span style="display:flex;gap:6px">
+            <form action="/admin/jueces/<%= j.id %>/toggle" method="POST"><button class="btn btn-ghost btn-sm"><%= j.visible?'Ocultar':'Mostrar' %></button></form>
+            <form action="/admin/jueces/<%= j.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar?')"><button class="btn btn-danger btn-sm">✕</button></form>
+          </span>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Agregar juez/a al jurado</h3>
+    <form action="/admin/jueces" method="POST">
+      <label>Nombre completo *</label><input name="full_name" required>
+      <label>Especialidad</label><input name="specialty" placeholder="ej: Jueza Nacional · Figuras obligatorias">
+      <label>Bio corta</label><textarea name="bio" rows="3" placeholder="Trayectoria, títulos, etc."></textarea>
+      <label>URL de foto (opcional)</label><input name="photo" placeholder="https://...">
+      <button class="btn btn-gold mt" type="submit">Agregar al jurado</button>
+    </form>
+  </div>
+</div>

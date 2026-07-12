@@ -1,0 +1,36 @@
+<a href="/torneos" class="muted">← Volver a torneos</a>
+<div class="card mt">
+  <div class="tour-date"><%= t.date ? fmtDate(t.date) : 'Fecha a confirmar' %></div>
+  <h1><%= t.name %></h1>
+  <p style="color:#6a5a80;font-size:1.05rem">📍 <%= t.location || 'Sede a confirmar' %></p>
+  <% if (t.description) { %><p style="color:#3a2a4e"><%= t.description %></p><% } %>
+  <% if (t.status==='publicado' && user && user.role==='profesor') { %>
+    <a href="/profe/inscribir?torneo=<%= t.id %>" class="btn btn-gold">Inscribir a mis alumnos</a>
+  <% } else if (t.status==='publicado' && !user) { %>
+    <a href="/login" class="btn btn-gold">Soy profe · Inscribir alumnos</a>
+  <% } else if (t.status==='cerrado') { %>
+    <span class="badge badge-info">Inscripción cerrada</span>
+  <% } %>
+</div>
+
+<div class="section-title"><h2 class="gold">Categorías</h2></div>
+<% if (categorias.length === 0) { %>
+  <div class="card-dark card">Las categorías se publicarán pronto.</div>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Categoría</th><th>Nivel</th><th>Edades</th><th>Género</th><th>Horario</th></tr></thead>
+      <tbody>
+        <% categorias.forEach(c => { %>
+          <tr>
+            <td><strong><%= c.name %></strong></td>
+            <td><%= c.level || '—' %></td>
+            <td><%= c.age_min!=null||c.age_max!=null ? (c.age_min||'') + ' a ' + (c.age_max||'') + ' años' : 'Libre' %></td>
+            <td><%= c.gender || 'Mixto' %></td>
+            <td><%= c.schedule || 'A confirmar' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

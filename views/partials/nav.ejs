@@ -1,0 +1,30 @@
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/" class="brand">
+      <img src="/img/logo.svg" alt="Star Dance">
+      <span>Star Dance<small>PATÍN ARTÍSTICO</small></span>
+    </a>
+    <button class="nav-toggle" onclick="toggleNav()" aria-label="Menú">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="/" class="<%= nav==='home'?'active':'' %>">Inicio</a>
+      <a href="/torneos" class="<%= nav==='torneos'?'active':'' %>">Torneos</a>
+      <a href="/jueces" class="<%= nav==='jueces'?'active':'' %>">Jueces</a>
+      <% if (user) { %>
+        <% if (user.role==='profesor') { %>
+          <a href="/profe" class="<%= nav==='profe'?'active':'' %>">Mis alumnos</a>
+          <a href="/profe/inscribir" class="<%= nav==='inscribir'?'active':'' %>">Inscribir</a>
+        <% } %>
+        <% if (user.role==='admin') { %>
+          <a href="/admin" class="<%= nav==='admin'?'active':'' %>">Panel admin</a>
+        <% } %>
+        <% if (user.role==='juez') { %>
+          <a href="/juez" class="<%= nav==='juez'?'active':'' %>">Módulo jueces</a>
+        <% } %>
+        <span class="pill"><%= user.role %></span>
+        <a href="/logout">Salir</a>
+      <% } else { %>
+        <a href="/login" class="btn btn-gold btn-sm">Iniciar sesión</a>
+      <% } %>
+    </div>
+  </div>
+</nav>

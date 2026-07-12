@@ -1,0 +1,50 @@
+<div class="toolbar">
+  <h1 class="gold" style="margin:0">Módulo de jueces</h1>
+  <div class="spacer"></div>
+  <% if (selTorneo) { %><a href="/juez/export.csv?torneo=<%= selTorneo %>" class="btn btn-gold btn-sm">⬇ Exportar listado</a><% } %>
+</div>
+<p class="muted">Listado de patinadores inscriptos con los datos cargados por cada profesor/a.</p>
+
+<% if (torneos.length===0) { %>
+  <div class="card-dark card">Todavía no hay torneos publicados.</div>
+<% } else { %>
+  <div class="card">
+    <form method="GET" action="/juez">
+      <label>Torneo a evaluar</label>
+      <select name="torneo" onchange="this.form.submit()">
+        <% torneos.forEach(t => { %><option value="<%= t.id %>" <%= t.id===selTorneo?'selected':'' %>><%= t.name %><%= t.date?' · '+fmtDate(t.date):'' %></option><% }) %>
+      </select>
+    </form>
+  </div>
+
+  <p class="muted"><strong><%= total %></strong> inscriptos en <strong><%= torneoSel ? torneoSel.name : '' %></strong>.</p>
+
+  <% if (grupos.length===0) { %>
+    <div class="card-dark card">Este torneo aún no tiene inscriptos.</div>
+  <% } else { %>
+    <% grupos.forEach(g => { %>
+      <div class="section-title"><h2 class="gold" style="font-size:1.3rem">
+        <%= g.cat.cname %><%= g.cat.clevel ? ' · '+g.cat.clevel : '' %>
+        <span class="muted" style="font-size:.9rem">
+          <%= (g.cat.age_min!=null||g.cat.age_max!=null) ? '('+(g.cat.age_min||'?')+'-'+(g.cat.age_max||'?')+' años)' : '' %>
+          <%= g.cat.cschedule ? '· '+g.cat.cschedule : '' %> · <%= g.items.length %> patinadores
+        </span>
+      </h2></div>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>#</th><th>Apellido y nombre</th><th>Edad</th><th>Club</th><th>Profesor/a</th><th>Pago</th></tr></thead>
+        <tbody>
+          <% g.items.forEach((r,idx) => { %>
+            <tr>
+              <td><%= idx+1 %></td>
+              <td><strong><%= r.last_name %>, <%= r.first_name %></strong></td>
+              <td><%= ageAt(r.birth_date)!=null ? ageAt(r.birth_date) : '—' %></td>
+              <td><%= r.club||'—' %></td>
+              <td><%= r.profe %></td>
+              <td><%= r.paid ? '<span class="badge badge-ok">Sí</span>' : '<span class="badge badge-no">No</span>' %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table></div>
+    <% }) %>
+  <% } %>
+<% } %>

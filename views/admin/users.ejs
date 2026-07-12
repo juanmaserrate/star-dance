@@ -1,0 +1,52 @@
+<%- include('../partials/admin_tabs', { tab: 'usuarios' }) %>
+<h1 class="gold">Usuarios de la plataforma</h1>
+<div class="grid grid-2">
+  <div class="card">
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Nombre</th><th>Usuario</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        <% usuarios.forEach(u => { %>
+          <tr>
+            <td><strong><%= u.full_name %></strong><br><span class="muted" style="font-size:.8rem"><%= u.email||'' %></span></td>
+            <td><%= u.username %></td>
+            <td><span class="badge badge-info"><%= u.role %></span></td>
+            <td><%= u.active ? '<span class="badge badge-ok">activo</span>' : '<span class="badge badge-no">inactivo</span>' %></td>
+            <td style="white-space:nowrap">
+              <details><summary class="btn btn-ghost btn-sm" style="list-style:none">Clave</summary>
+                <form action="/admin/usuarios/<%= u.id %>/reset" method="POST" style="margin-top:6px">
+                  <input name="password" placeholder="nueva clave" required style="width:120px;display:inline">
+                  <button class="btn btn-violeta btn-sm">OK</button>
+                </form>
+              </details>
+              <form action="/admin/usuarios/<%= u.id %>/toggle" method="POST" style="display:inline">
+                <button class="btn btn-sm btn-ghost"><%= u.active?'Desactivar':'Activar' %></button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <h3>Crear usuario</h3>
+    <form action="/admin/usuarios" method="POST">
+      <label>Nombre completo *</label><input name="full_name" required>
+      <label>Rol *</label>
+      <select name="role"><option value="profesor">Profesor/a</option><option value="juez">Juez/a</option><option value="admin">Administrador/a</option></select>
+      <div class="form-row">
+        <div><label>Usuario *</label><input name="username" required placeholder="ej: profe.ana"></div>
+        <div><label>Contraseña *</label><input name="password" required></div>
+      </div>
+      <div class="form-row">
+        <div><label>Email</label><input name="email" type="email"></div>
+        <div><label>Teléfono</label><input name="phone"></div>
+      </div>
+      <label>Club (para profes)</label>
+      <select name="club_id"><option value="">—</option>
+        <% clubs.forEach(c => { %><option value="<%= c.id %>"><%= c.name %></option><% }) %>
+      </select>
+      <button class="btn btn-gold mt" type="submit">Crear usuario</button>
+      <p class="hint">Los jueces creados acá aparecen automáticamente en la página pública de jurado.</p>
+    </form>
+  </div>
+</div>

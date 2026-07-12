@@ -1,0 +1,24 @@
+<%- include('../partials/admin_tabs', { tab: 'torneos' }) %>
+<div class="toolbar">
+  <h1 class="gold" style="margin:0">Torneos</h1><div class="spacer"></div>
+  <a href="/admin/torneos/nuevo" class="btn btn-gold">+ Nuevo torneo</a>
+</div>
+<div class="table-wrap"><table class="data">
+  <thead><tr><th>Torneo</th><th>Fecha</th><th>Sede</th><th>Estado</th><th>Cat.</th><th>Insc.</th><th></th></tr></thead>
+  <tbody>
+    <% if(torneos.length===0){ %><tr><td colspan="7" class="muted">Todavía no hay torneos.</td></tr><% } %>
+    <% torneos.forEach(t => { %>
+      <tr>
+        <td><strong><%= t.name %></strong></td>
+        <td><%= t.date ? fmtDate(t.date) : '—' %></td>
+        <td><%= t.location || '—' %></td>
+        <td>
+          <% const cls = t.status==='publicado'?'badge-ok':(t.status==='cerrado'?'badge-info':'badge-no'); %>
+          <span class="badge <%= cls %>"><%= t.status %></span>
+        </td>
+        <td><%= t.cats %></td><td><%= t.insc %></td>
+        <td><a href="/admin/torneos/<%= t.id %>" class="btn btn-violeta btn-sm">Gestionar</a></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table></div>

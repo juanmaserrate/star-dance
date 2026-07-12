@@ -1,0 +1,75 @@
+<a href="/profe" class="muted">← Volver a mis alumnos</a>
+<div class="toolbar mt">
+  <h1 class="gold" style="margin:0"><%= s.last_name %>, <%= s.first_name %></h1>
+  <div class="spacer"></div>
+  <a href="/profe/alumnos/<%= s.id %>/editar" class="btn btn-ghost btn-sm">Editar</a>
+  <form action="/profe/alumnos/<%= s.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar a este alumno/a y sus documentos?')">
+    <button class="btn btn-danger btn-sm">Eliminar</button>
+  </form>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Datos personales</h3>
+    <p><span class="tag">DNI</span> <%= s.dni || '—' %></p>
+    <p><span class="tag">Nac.</span> <%= s.birth_date ? fmtDate(s.birth_date) : '—' %>
+       <%= ageAt(s.birth_date)!=null ? '· ' + ageAt(s.birth_date) + ' años' : '' %></p>
+    <p><span class="tag">Género</span> <%= s.gender || '—' %></p>
+    <p><span class="tag">Club</span> <%= s.club_name || '—' %></p>
+    <p><span class="tag">Nivel</span> <%= s.level || '—' %></p>
+    <% if (s.notes) { %><p><span class="tag">Notas</span> <%= s.notes %></p><% } %>
+    <a href="/profe/inscribir" class="btn btn-gold btn-sm mt">Inscribir a un torneo</a>
+  </div>
+
+  <div class="card">
+    <h3>Fichas y documentos</h3>
+    <ul class="clean">
+      <% if (docs.length===0) { %><li class="muted" style="color:#8a7aa0">Todavía no hay documentos cargados.</li><% } %>
+      <% docs.forEach(d => { %>
+        <li class="doc-item">
+          <span><span class="tag"><%= d.doc_type %></span>
+            <a href="/profe/documentos/<%= d.id %>/ver" target="_blank"><%= d.label || d.original_name %></a></span>
+          <form action="/profe/documentos/<%= d.id %>?_method=DELETE" method="POST" onsubmit="return confirm('¿Eliminar documento?')">
+            <button class="btn btn-sm btn-danger">✕</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+    <hr style="border:none;border-top:1px solid #eee;margin:16px 0">
+    <form action="/profe/alumnos/<%= s.id %>/documentos" method="POST" enctype="multipart/form-data">
+      <label>Tipo de documento</label>
+      <select name="doc_type">
+        <option value="ficha_tecnica">Ficha técnica</option>
+        <option value="documento">Documento (DNI)</option>
+        <option value="seguro_salud">Seguro de salud</option>
+        <option value="apto_medico">Apto médico</option>
+        <option value="otro">Otro</option>
+      </select>
+      <label>Descripción (opcional)</label>
+      <input name="label" placeholder="ej: Ficha temporada 2026">
+      <label>Archivo (PDF, imagen o Word · máx 12MB)</label>
+      <input type="file" name="archivo" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" required>
+      <button class="btn btn-violeta mt" type="submit">Subir documento</button>
+    </form>
+  </div>
+</div>
+
+<div class="section-title"><h2 class="gold">Inscripciones de <%= s.first_name %></h2></div>
+<% if (inscr.length===0) { %>
+  <div class="card-dark card">Sin inscripciones por ahora.</div>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Torneo</th><th>Categoría</th><th>Pago</th><th>Certificado</th></tr></thead>
+      <tbody>
+        <% inscr.forEach(i => { %>
+          <tr>
+            <td><%= i.tname %></td><td><%= i.cname %></td>
+            <td><%= i.paid ? '<span class="badge badge-ok">Pagado</span>' : '<span class="badge badge-no">Pendiente</span>' %></td>
+            <td><a href="/certificado/<%= i.code %>" target="_blank">Ver</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

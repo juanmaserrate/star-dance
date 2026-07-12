@@ -1,0 +1,25 @@
+<%- include('../partials/admin_tabs', { tab: 'torneos' }) %>
+<a href="/admin/torneos" class="muted">← Volver</a>
+<div class="card mt" style="max-width:720px">
+  <h1><%= t.id ? 'Editar' : 'Nuevo' %> torneo</h1>
+  <form action="<%= action %>" method="<%= method %>">
+    <label>Nombre del torneo *</label>
+    <input name="name" value="<%= t.name||'' %>" required placeholder="ej: Copa Star Dance 2026">
+    <div class="form-row">
+      <div><label>Fecha</label><input type="date" name="date" value="<%= t.date||'' %>"></div>
+      <div><label>Estado</label>
+        <select name="status">
+          <% ['borrador','publicado','cerrado'].forEach(s => { %>
+            <option <%= t.status===s?'selected':'' %>><%= s %></option>
+          <% }) %>
+        </select>
+      </div>
+    </div>
+    <label>Sede / lugar</label>
+    <input name="location" value="<%= t.location||'' %>" placeholder="ej: Club San Martín, Buenos Aires">
+    <label>Descripción</label>
+    <textarea name="description" rows="3" placeholder="Info del torneo, requisitos, etc."><%= t.description||'' %></textarea>
+    <p class="hint">Solo los torneos en estado <strong>publicado</strong> aparecen en el sitio y permiten inscribir.</p>
+    <button class="btn btn-gold mt" type="submit">Guardar torneo</button>
+  </form>
+</div>

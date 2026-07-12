@@ -1,0 +1,47 @@
+<h1 class="gold">Inscribir alumnos a un torneo</h1>
+<% if (torneos.length===0) { %>
+  <div class="card-dark card">No hay torneos con inscripción abierta en este momento.</div>
+<% } else { %>
+  <div class="card">
+    <form method="GET" action="/profe/inscribir">
+      <label>Elegí el torneo</label>
+      <select name="torneo" onchange="this.form.submit()">
+        <% torneos.forEach(t => { %>
+          <option value="<%= t.id %>" <%= t.id===selTorneo?'selected':'' %>><%= t.name %><%= t.date ? ' · ' + fmtDate(t.date) : '' %></option>
+        <% }) %>
+      </select>
+    </form>
+  </div>
+
+  <form method="POST" action="/profe/inscribir" class="card">
+    <label>Categoría del torneo</label>
+    <select name="category_id" required>
+      <option value="">— Elegí una categoría —</option>
+      <% categorias.forEach(c => { %>
+        <option value="<%= c.id %>">
+          <%= c.name %><%= c.level ? ' · ' + c.level : '' %><%= (c.age_min!=null||c.age_max!=null) ? ' · ' + (c.age_min||'') + '-' + (c.age_max||'') + ' años' : '' %><%= c.schedule ? ' · ' + c.schedule : '' %>
+        </option>
+      <% }) %>
+    </select>
+    <% if (categorias.length===0) { %><p class="hint">Este torneo aún no tiene categorías cargadas.</p><% } %>
+
+    <label class="mt">Elegí a los patinadores a inscribir</label>
+    <% if (students.length===0) { %>
+      <p class="hint">No tenés alumnos cargados. <a href="/profe/alumnos/nuevo">Cargá uno primero.</a></p>
+    <% } else { %>
+      <div style="max-height:340px;overflow:auto;border:1px solid #e6dcf0;border-radius:10px;padding:8px">
+        <% students.forEach(s => { %>
+          <label style="display:flex;align-items:center;gap:10px;font-weight:600;padding:7px 6px;border-bottom:1px solid #f0eaf7;margin:0">
+            <input type="checkbox" name="student_ids" value="<%= s.id %>" style="width:auto">
+            <span><%= s.last_name %>, <%= s.first_name %>
+              <span class="muted" style="color:#8a7aa0;font-weight:400">
+                <%= ageAt(s.birth_date)!=null ? '· ' + ageAt(s.birth_date) + ' años' : '' %>
+                <%= s.level ? '· ' + s.level : '' %></span>
+            </span>
+          </label>
+        <% }) %>
+      </div>
+      <button class="btn btn-gold mt" type="submit">Inscribir seleccionados</button>
+    <% } %>
+  </form>
+<% } %>

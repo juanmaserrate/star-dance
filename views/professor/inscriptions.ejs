@@ -1,0 +1,24 @@
+<div class="toolbar">
+  <h1 class="gold" style="margin:0">Mis inscripciones</h1>
+  <div class="spacer"></div>
+  <a href="/profe/inscribir" class="btn btn-gold btn-sm">+ Inscribir</a>
+</div>
+<% if (rows.length===0) { %>
+  <div class="card-dark card">Todavía no inscribiste a ningún alumno.</div>
+<% } else { %>
+  <div class="table-wrap">
+    <table class="data">
+      <thead><tr><th>Patinador</th><th>Torneo</th><th>Categoría</th><th>Pago</th><th>Certificado</th></tr></thead>
+      <tbody>
+        <% rows.forEach(i => { %>
+          <tr>
+            <td><strong><%= i.last_name %>, <%= i.first_name %></strong></td>
+            <td><%= i.tname %></td><td><%= i.cname %></td>
+            <td><%= i.paid ? '<span class="badge badge-ok">Pagado</span>' : '<span class="badge badge-no">Pendiente</span>' %></td>
+            <td><a href="/certificado/<%= i.code %>" target="_blank">Ver certificado</a></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>

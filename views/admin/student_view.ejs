@@ -1,0 +1,32 @@
+<%- include('../partials/admin_tabs', { tab: 'inscripciones' }) %>
+<a href="javascript:history.back()" class="muted">← Volver</a>
+<div class="card mt">
+  <h1 class="gold"><%= s.last_name %>, <%= s.first_name %></h1>
+  <div class="grid grid-2">
+    <div>
+      <p><span class="tag">DNI</span> <%= s.dni||'—' %></p>
+      <p><span class="tag">Nacimiento</span> <%= s.birth_date?fmtDate(s.birth_date):'—' %> <%= ageAt(s.birth_date)!=null?'· '+ageAt(s.birth_date)+' años':'' %></p>
+      <p><span class="tag">Género</span> <%= s.gender||'—' %></p>
+    </div>
+    <div>
+      <p><span class="tag">Club</span> <%= s.club_name||'—' %></p>
+      <p><span class="tag">Nivel</span> <%= s.level||'—' %></p>
+      <p><span class="tag">Profe</span> <%= s.profe %></p>
+    </div>
+  </div>
+  <% if(s.notes){ %><p><span class="tag">Notas</span> <%= s.notes %></p><% } %>
+</div>
+
+<div class="card">
+  <h3>Fichas técnicas, documentos y seguros</h3>
+  <ul class="clean">
+    <% if(docs.length===0){ %><li class="muted">Sin documentos cargados por el profesor.</li><% } %>
+    <% docs.forEach(d => { %>
+      <li class="doc-item">
+        <span><span class="tag"><%= d.doc_type %></span>
+          <a href="/admin/documentos/<%= d.id %>/ver" target="_blank"><%= d.label || d.original_name %></a></span>
+        <span class="muted" style="font-size:.8rem"><%= fmtDate(d.uploaded_at) %></span>
+      </li>
+    <% }) %>
+  </ul>
+</div>

@@ -1,0 +1,44 @@
+<%- include('../partials/admin_tabs', { tab: 'home' }) %>
+<h1 class="gold">Panel de la liga</h1>
+
+<div class="grid grid-4 mb">
+  <div class="stat"><div class="num"><%= stats.inscriptos %></div><div class="lbl">Inscriptos totales</div></div>
+  <div class="stat"><div class="num"><%= stats.pagados %></div><div class="lbl">Pagos confirmados</div></div>
+  <div class="stat"><div class="num"><%= stats.pendientes %></div><div class="lbl">Pagos pendientes</div></div>
+  <div class="stat"><div class="num"><%= stats.alumnos %></div><div class="lbl">Patinadores</div></div>
+</div>
+<div class="grid grid-3 mb">
+  <div class="stat"><div class="num"><%= stats.torneos %></div><div class="lbl">Torneos</div></div>
+  <div class="stat"><div class="num"><%= stats.publicados %></div><div class="lbl">Publicados</div></div>
+  <div class="stat"><div class="num"><%= stats.profes %></div><div class="lbl">Profesores</div></div>
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3>Inscriptos por torneo</h3>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Torneo</th><th>Inscriptos</th><th>Pagos</th></tr></thead>
+      <tbody>
+        <% if(porTorneo.length===0){ %><tr><td colspan="3" class="muted">Sin datos aún.</td></tr><% } %>
+        <% porTorneo.forEach(t => { %>
+          <tr><td><a href="/admin/torneos/<%= t.id %>"><%= t.name %></a></td>
+            <td><%= t.n %></td><td><span class="badge badge-ok"><%= t.pagos||0 %></span></td></tr>
+        <% }) %>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <h3>Patinadores por club</h3>
+    <div class="table-wrap"><table class="data">
+      <thead><tr><th>Club</th><th>Cantidad</th></tr></thead>
+      <tbody>
+        <% if(porClub.length===0){ %><tr><td colspan="2" class="muted">Sin datos aún.</td></tr><% } %>
+        <% porClub.forEach(c => { %><tr><td><%= c.club %></td><td><%= c.n %></td></tr><% }) %>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+<div class="card-dark card mt">
+  📊 Podés exportar el listado completo de inscriptos a Excel desde
+  <a href="/admin/inscripciones">Inscripciones → Exportar CSV</a>.
+</div>
